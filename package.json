@@ -1,0 +1,30 @@
+{
+    "author": "john fellman",
+    "bugs": {
+        "url": "https://github.com/north-bay/bitbucket-cli/issues"
+    },
+    "dependencies": {
+        "bluebird": "3.0.1",
+        "cli-color": "1.1.0",
+        "underscore": "1.8.3"
+    },
+    "description": "custom cli for bitbucket server",
+    "homepage": "https://github.com/north-bay/bitbucket-cli#readme",
+    "keywords": [
+        "cli",
+        "bitbucket",
+        "node"
+    ],
+    "license": "ISC",
+    "main": "bb-cli.js",
+    "name": "bitbucket-cli",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/north-bay/bitbucket-cli.git"
+    },
+    "scripts": {
+        "start": "node bb-cli.js"
+    },
+    "version": "0.0.1"
+}
