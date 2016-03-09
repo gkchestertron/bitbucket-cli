@@ -1,17 +1,18 @@
-var _  = require('underscore');
-var fs = require('fs');
-var exec = require('./exec');
-var pr = require('./pr');
+var _       = require('underscore');
+var fs      = require('fs');
+var exec    = require('./exec');
+var pr      = require('./pr');
+var config  = require('./config');
 var rawArgs = process.argv.slice(2);
-var args = [];
-var flags = {};
+var args    = [];
+var flags   = {};
 var options = {};
 var arg;
 var option;
 var flag;
 
 // clear screen
-exec('clear');
+exec('clear').then(console.log.bind(console));
 
 while (arg = rawArgs.shift()) {
     if (/--/.test(arg)) {
@@ -36,7 +37,7 @@ while (arg = rawArgs.shift()) {
     }
 }
 
-var action = args[0];
+var action    = args[0];
 var subAction = args[1];
 var path;
 
@@ -45,13 +46,32 @@ switch (action) {
         if (subAction === 'all')
             subAction = '';
         path = 'pull-requests/'+(subAction || '');
-        pr.fetch(path, args, flags, options);
+        pr.exec(path, args, flags, options);
         break;
     default:
+        if (Object.keys(flags).length) {
+            runFlags(action, subAction, flags);
+            break;
+        }
         fs.readFile(__dirname+'/usage.txt', 'utf8', function (err, data) {
             if (err)
                 throw err;
             console.log(data);
         });
         break;
+}
+
+function runFlags(action, subAction, flags) {
+    var scriptObj = config.scripts;
+
+    if (action)
+        scriptObj = scriptObj[action];
+
+    if (subAction)
+        scriptObj = scriptObj[subAction];
+
+    _.each(flags, function (value, flag) {
+        if (scriptObj[flag])
+            scriptObj[flag](value);
+    });
 }

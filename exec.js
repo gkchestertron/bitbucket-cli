@@ -1,5 +1,13 @@
 var exec = require('child_process').exec;
-function puts(error, stdout, stderr) { console.log(stdout) }
+var P    = require('bluebird');
+
 module.exports = function (cmd) {
-    exec(cmd, puts);
+    return new P(function (resolve, reject) {
+        exec(cmd, function (err, stdout, stderr) {
+            if (err)
+                reject(err);
+            else
+                resolve(stdout);
+        });
+    });
 };

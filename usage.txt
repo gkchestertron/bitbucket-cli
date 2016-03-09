@@ -1,7 +1,10 @@
 Usage:
+-l - pipe into less
+-b - build on current branch
 pr [id] - pull request, if id is provided it will pull just the one
     flags:
         -o open in browser [only if single pr is returned]
-        -p patch and build the diff [only if single pr is returned]
+        -b patch and build the diff [only if single pr is returned]
         -a specify author username to filter
         -r specify reviewer username to filter
+        -j write the raw data to temp.json

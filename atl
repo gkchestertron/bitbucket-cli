@@ -1,0 +1,7 @@
+#!/bin/bash
+if [[ $@ == **-l** ]]
+then
+	node "`dirname $0`"/atl.js "$@" | less -R
+else
+	node "`dirname $0`"/atl.js "$@"
+fi
