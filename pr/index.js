@@ -9,9 +9,17 @@ var _      = require('underscore');
 
 module.exports = {
     create: function () {
-        spawn('vim', [__dirname+'/template.txt', '-c :w! '+__dirname+'/temp.txt'])
+        spawn('vim', [__dirname+'/template.txt', '-c :w! '+__dirname+'/temp.txt | :e '+__dirname+'/temp.txt'])
         .then(function () {
-            return spawn('vim', [__dirname+'/temp.txt']);
+            fs.readFile(__dirname+'/temp.txt', 'utf8', function (err, data) {
+                var dataSplit = data.split(/Title:\n|Reviewers:\n|Description:\n/);
+
+                console.log({ 
+                    Title: dataSplit[1].trim(), 
+                    Description: dataSplit[2].trim(), 
+                    Reviewers: dataSplit[3].trim()
+                });
+            });
         });
     },
 
@@ -28,6 +36,11 @@ module.exports = {
         rest.fetch(path).then(function (response) {
             var prs = response.values || [response],
                 authorname = reviewername = config.username;
+
+            // sort prs
+            prs.sort(function (a, b) {
+                return a.id - b.id;
+            });
 
             // author flag
             if (flags['a']) {
@@ -53,6 +66,7 @@ module.exports = {
                 });
             }
 
+            // grep
             if (flags['g']) {
                 prs = _.filter(prs, function (pr) {
                     var re = new RegExp(flags['g'], 'i');
@@ -61,6 +75,7 @@ module.exports = {
                 });
             }
 
+            // raw output to temp.json
             if (flags['j'])
                 fs.writeFile(__dirname+'/temp.json', JSON.stringify(prs));
 
@@ -94,7 +109,6 @@ module.exports = {
                     // patch flag
                     if (flags['b']) {
                         exec('git checkout '+pr.fromRef.displayId);
-                        exec('git pull');
                         exec('vagrant ssh -c "fixall"');
                     }
 

@@ -26,11 +26,14 @@ while (arg = rawArgs.shift()) {
             option[arg] = true;
     }
     else if (/-/.test(arg)) {
-        arg = arg.slice(1);
-        if (rawArgs[0] && !/-/.test(rawArgs[0]))
-            flags[arg] = rawArgs.shift();
-        else
-            flags[arg] = true;
+        arg = arg.slice(1).split('');
+
+        for (var i in arg) {
+            if (rawArgs[0] && !/-/.test(rawArgs[0]))
+                flags[arg[i]] = rawArgs.shift();
+            else
+                flags[arg[i]] = true;
+        }
     }
     else {
         args.push(arg);
