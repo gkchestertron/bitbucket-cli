@@ -75,6 +75,20 @@ module.exports = {
                 });
             }
 
+            // tasks
+            if (flags['t']) {
+                console.log(style.label('Showing pull requests with no open tasks...\n'));
+                prs = _.filter(prs, function (pr) {
+                    return pr.attributes && parseInt(pr.attributes.openTaskCount[0]) !== 0;
+                });
+            }
+            else {
+                console.log(style.label('Showing only pull requests with open tasks...\n'));
+                prs = _.filter(prs, function (pr) {
+                    return !pr.attributes || !pr.attributes.openTaskCount || parseInt(pr.attributes.openTaskCount[0]) === 0;
+                });
+            }
+
             // raw output to temp.json
             if (flags['j'])
                 fs.writeFile(__dirname+'/temp.json', JSON.stringify(prs));
@@ -101,6 +115,8 @@ module.exports = {
                     
                     return str;
                 }).join(style.label(', ')));
+                if (pr.attributes && pr.attributes.openTaskCount)
+                    console.log(style.label('Open Tasks: '), style.prop(pr.attributes.openTaskCount[0]));
                 if (prs.length === 1) {
                     // open flag
                     if (flags['o'])

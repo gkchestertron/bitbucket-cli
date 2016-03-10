@@ -7,4 +7,5 @@ pr [id] - pull request, if id is provided it will pull just the one
         -b patch and build the diff [only if single pr is returned]
         -a specify author username to filter
         -r specify reviewer username to filter
+        -t include prs with open tasks
         -j write the raw data to temp.json
