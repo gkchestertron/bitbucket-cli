@@ -76,13 +76,13 @@ module.exports = {
             }
 
             // tasks
-            if (flags['t']) {
+            if (flags['t'] && prs.length > 1) {
                 console.log(style.label('Showing pull requests with no open tasks...\n'));
                 prs = _.filter(prs, function (pr) {
                     return pr.attributes && parseInt(pr.attributes.openTaskCount[0]) !== 0;
                 });
             }
-            else {
+            else if (prs.length > 1) {
                 console.log(style.label('Showing only pull requests with open tasks...\n'));
                 prs = _.filter(prs, function (pr) {
                     return !pr.attributes || !pr.attributes.openTaskCount || parseInt(pr.attributes.openTaskCount[0]) === 0;

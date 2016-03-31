@@ -28,5 +28,6 @@ module.exports.fetch = function (path) {
         });
 
         request.end();
-    });
+    })
+    .catch(console.log.bind(console));
 }
