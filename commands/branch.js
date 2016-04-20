@@ -3,17 +3,21 @@ var _    = require('underscore');
 
 module.exports = {
     checkout: {
-        description: 'checkout a branch based on an issue number',
+        description: '<number> [<index> (if multiple)] checkout a branch based on an issue number',
 
-        exec: function (target, branchNumber) {
-            return exec('git branch -a | grep '+branchNumber)
+        exec: function (target, branchNumber, index) {
+            return exec("git branch -a | grep '"+branchNumber+"'")
             .then(function (branches) {
-                branches = branches.split('\n');
-                return _.map(branches, function (branch) {
-                    if (/^\/remotes\/origin\//.test(branch))
-                        return branch.slice(15);
-                    return branch;
-                }).join('\n');
+                branches = _.map(branches.split('\n'), function (branch) {
+                    return branch.trim();
+                });
+
+                if (branches.length === 1)
+                    return exec('git checkout '+branches[0]);
+                else if (index !== undefined)
+                    return exec('git checkout '+branches[index]);
+                else
+                    return 'Multiple branches:\n'+branches.join('\n');
             });
         }
     },

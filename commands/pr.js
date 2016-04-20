@@ -9,6 +9,51 @@ var spawn  = require('../spawn');
 var _      = require('underscore');
 
 module.exports = {
+    create: {
+        description: '<title> <fromRef> <toRef> create a pull request',
+        display: function (result) {
+            console.log(JSON.stringify(result));
+        },
+        exec: function (target, title, fromRef, toRef) {
+            if (!title)
+                return Promise.resolve('please enter a title');
+
+            if (!fromRef)
+                return Promise.resolve('please enter a fromRef');
+
+            if (!toRef)
+                return Promise.resolve('please enter a toRef');
+
+            reviewers = target.reviewers || '';
+
+            reviewers = _.map(reviewers.split(','), function (reviewer) {
+                return { user: { name: reviewer.trim() }};
+            });
+
+            return rest.post('pull-requests', JSON.stringify({
+                title: title,
+                description: target.description || '',
+                fromRef: {
+                    id: fromRef
+                },
+                toRef: {
+                    id: toRef
+                },
+                reviewers: reviewers
+            }));
+        },
+
+        flags: {
+            r: {
+                description: 'reviewers - comma separated string',
+                name: 'reviewers'
+            },
+            d: {
+                description: 'description',
+                name: 'description'
+            }
+        }
+    },
     description: '[<id>] gets the pull-requests',
     display: function (result) {
         _.each(result.prs, function (pr) {
