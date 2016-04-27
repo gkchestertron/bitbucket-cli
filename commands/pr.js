@@ -45,7 +45,9 @@ module.exports = {
 
         flags: {
             r: {
-                description: 'reviewers - comma separated string',
+                description: 'reviewers - comma separated string - '
+                + 'possible reviewers: '
+                + 'fellmanj, fonesr, ponnagag, JoopallS, SreenivasanK, hulettp, brownp',
                 name: 'reviewers'
             },
             d: {
