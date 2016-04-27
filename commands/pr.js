@@ -26,6 +26,7 @@ module.exports = {
 
             reviewers = target.reviewers || '';
 
+            reviewers = reviewers.split('frontend').join('fonesr,JoopallS,ponnagag,SreenivasanK');
             reviewers = _.map(reviewers.split(','), function (reviewer) {
                 return { user: { name: reviewer.trim() }};
             });
@@ -45,9 +46,10 @@ module.exports = {
 
         flags: {
             r: {
-                description: 'reviewers - comma separated string - '
+                description: 'reviewers - comma separated string'
                 + '\npossible reviewers: '
-                + '\nfellmanj, fonesr, ponnagag, JoopallS, SreenivasanK, hulettp, brownp',
+                + '\nfellmanj, fonesr, ponnagag, JoopallS, SreenivasanK,'
+                + '\nhulettp, brownp, riegerj, chismb',
                 name: 'reviewers'
             },
             d: {
