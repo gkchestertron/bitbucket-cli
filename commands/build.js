@@ -1,9 +1,9 @@
-var exec = require('../exec');
+var spawn = require('../spawn');
 
 module.exports = {
     description: 'builds the current branch',
 
     exec: function (target) {
-        return exec('vagrant ssh -c "fixall"');
+        return spawn('vagrant', ['ssh', '-c fixall']);
     }
 };

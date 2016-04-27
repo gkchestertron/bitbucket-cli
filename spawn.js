@@ -3,16 +3,22 @@ var P  = require('bluebird');
 
 module.exports = function (cmd, args) {
     return new P(function (resolve, reject) {
-        var sp = cp.spawn(cmd, args, {
-            customFds: [
-                process.stdin,
-                process.stdout,
-                process.stderr
-            ]
+        var sp = cp.spawn(cmd, args);
+
+        sp.stdout.on('data', function (data) {
+            process.stdout.write(data.toString());
+        });
+        
+        sp.stdin.on('data', function (data) {
+            process.stdout.write(data.toString());
+        });
+
+        sp.stderr.on('data', function (data) {
+            process.stdout.write(data.toString());
         });
         
         sp.on('exit', function (code) {
-            resolve(code);
+            resolve('');
         });
         
         sp.on('error', function (err) {
