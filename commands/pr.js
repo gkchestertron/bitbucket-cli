@@ -129,14 +129,30 @@ module.exports = {
         },
 
         b: {
-            description: 'builds on the branch',
+            description: 'builds on the pr\'s branch',
             exec: function (target, result) {
                 var pr = result.prs[0];
-                return exec('git checkout '+pr.fromRef.displayId).then(function () {
-                    return exec('vagrant ssh -c "fixall"');
+                return spawn('git', ['checkout', pr.fromRef.displayId])
+                .then(function () {
+                    return spawn('vagrant', ['ssh', '-c fixall']);
+                })
+                .then(function () {
+                    console.log('\n\n\n\n');
                 });
             },
             name: 'build'
+        },
+
+        c: {
+            description: 'checks out the pr\'s branch',
+            exec: function (target, result) {
+                var pr = result.prs[0];
+                return spawn('git', ['checkout', pr.fromRef.displayId])
+                .then(function () {
+                    console.log('\n\n\n\n');
+                });
+            },
+            name: 'checkout'
         },
 
         o: {
